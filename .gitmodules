@@ -1,0 +1,6 @@
+[submodule "ext/backbone"]
+	path = ext/backbone
+	url = https://github.com/documentcloud/backbone.git
+[submodule "ext/underscore"]
+	path = ext/underscore
+	url = https://github.com/documentcloud/underscore.git
