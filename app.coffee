@@ -10,7 +10,7 @@ app.configure () ->
 	app.register ".html", require "ejs"
 	app.set "view options", layout: false
 
-	app.use express.staticProvider "#{ __dirname }/public"
+	app.use express.static "#{ __dirname }/public"
 	app.use express.errorHandler { dumpExceptions: true, showStack: true }
  
 
