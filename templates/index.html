@@ -4,5 +4,27 @@
 	</head>
 	<body>
 		test
+		
+		<script src="scripts/zepto.min.js"></script>	
+		<script src="scripts/underscore-min.js"></script>	
+		<script src="scripts/backbone-min.js"></script>	
+		<script src="models/artist.js"></script>	
+		<script>
+			Artists.bind("add", function() {
+				console.log("2 add");
+			});
+			Artists.bind("refresh", function() {
+				console.log("2 refresh");
+			});
+			Artists.bind("all", function(eventName) {
+				console.log(Artists);
+				return;
+				var i = Artists[0];
+				console.log(i);
+				i.set("genre", "rock");
+			});
+			//Artists.create({ name: 'incubus' });
+			Artists.fetch();
+		</script>
 	</body>
 </html>
