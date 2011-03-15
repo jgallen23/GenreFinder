@@ -29,6 +29,6 @@ app.get "/artists", (req, res) ->
 app.post "/artists", (req, res) ->
 	data = req.body
 	artists.push data
-	res.send "created"
+	res.send '{ "status": "ok" }'
 
 app.listen 3000
