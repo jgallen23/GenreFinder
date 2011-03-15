@@ -28,6 +28,7 @@ app.get "/artists", (req, res) ->
 
 app.post "/artists", (req, res) ->
 	data = req.body
+	console.log data
 	artists.push data
 	res.send '{ "status": "ok" }'
 
