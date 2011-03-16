@@ -1,17 +1,24 @@
 applescript = require "applescript"
-library = "Library"
+library = "Greg's Library"
+
+
+_artistList = false
 
 exports.getArtistsAndGenres = (cb) ->
+	if _artistList
+		cb _artistList
+		return
 	ar = {}
 	@getArtists (artists) =>
 		@getGenres (genres) =>
 			artists.forEach (item, i) ->
 				if not ar[item]
 					ar[item] = []
-				if ar[item].indexOf(genres[i]) == -1
+				if genres[i] != "" and ar[item].indexOf(genres[i]) == -1
 					ar[item].push(genres[i])
-			json = for name, tags of ar
-				{ name: name, tags: tags }
+			json = for name, genres of ar
+				{ name: name, genres: genres }
+			_artistList = json
 			cb json
 
 exports.getArtists = (cb) ->

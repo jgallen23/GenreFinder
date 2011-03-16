@@ -1,8 +1,12 @@
 express = require "express"
 music = require "./lib/music"
+ejs = require "ejs"
 app = express.createServer()
 
 artists = []
+
+ejs.open = '{{'
+ejs.close = '}}'
 
 app.configure () ->
 	app.use express.methodOverride()
