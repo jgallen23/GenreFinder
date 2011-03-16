@@ -1,4 +1,5 @@
 express = require "express"
+music = require "./lib/music"
 app = express.createServer()
 
 artists = []
@@ -13,7 +14,7 @@ app.configure () ->
 	app.set "view engine", "ejs"
 	app.set "view options", layout: false
 
-	coffeeDir = "#{ __dirname }"
+	coffeeDir = "#{ __dirname }/coffee"
 	publicDir = "#{ __dirname }/public"
 	app.use express.compiler src: coffeeDir, dest: publicDir, enable: ['coffeescript']
 	app.use express.static publicDir
@@ -24,7 +25,9 @@ app.get "/", (req, res) ->
 	res.render "index.html"
 
 app.get "/artists", (req, res) ->
-	res.send JSON.stringify artists
+	a = music.getArtistsAndGenres (artists) ->
+		console.log artists
+		res.send JSON.stringify artists
 
 app.post "/artists", (req, res) ->
 	data = req.body

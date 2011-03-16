@@ -1,2 +1,4 @@
 .DS_Store
 public/models/*.js
+public/views/*.js
+public/controllers/*.js
