@@ -1,5 +1,6 @@
 express = require "express"
 music = require "./lib/music"
+lastfm = require "./lib/lastfm"
 ejs = require "ejs"
 app = express.createServer()
 
@@ -38,5 +39,12 @@ app.post "/artists", (req, res) ->
 	console.log data
 	artists.push data
 	res.send '{ "status": "ok" }'
+
+app.get "/lastfm/similar/:artist", (req, res) ->
+	artist = req.params.artist
+	l = new lastfm.LastFm "b65df1403e2b6b46ff46fb1c5cb5f578"
+	l.getSimilar artist, (similar) ->
+		res.send JSON.stringify(similar)
+
 
 app.listen 3000

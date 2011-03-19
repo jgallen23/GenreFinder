@@ -1,5 +1,5 @@
 applescript = require "applescript"
-library = "Greg's Library"
+library = "Library"
 
 
 _artistList = false

@@ -18,10 +18,9 @@ window.GenreFinderController = Backbone.Controller.extend
 			$("#Artist").show()
 			artist = Artists.filter (artist) ->
 				return (artist.get("name") == name)
-			console.log artist
-			#new ArtistView { model: artist }
+			new ArtistView { model: artist[0] }
 			console.log "artist", name
-		if !@artistLoaded
+		if !@artistsLoaded
 			Artists.fetch { success: show }
 		else
 			show()
