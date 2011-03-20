@@ -1,5 +1,5 @@
 window.ArtistView = Backbone.View.extend
-	el: $ "#Artist"
+	el: $ "#Artist [role='details']"
 	template: _.template $("#ArtistTemplate").html()
 	initialize: ->
 		@render()

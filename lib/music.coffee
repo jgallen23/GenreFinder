@@ -1,5 +1,5 @@
 applescript = require "applescript"
-library = "Library"
+library = "Greg's Library"
 
 
 _artistList = false
@@ -42,4 +42,11 @@ exports.getGenres = (cb) ->
 	applescript.execString script, (err, rtn) ->
 		cb rtn
 
+exports.setGenre = (artist, genre) ->
+	script = """
+	tell application "iTunes"
+		set genre of every track in library playlist 1 whose artist is "#{ artist }" to "#{ genre }"
+	end tell
+	"""
+	applescript.execString script, (err, rtn) ->
 

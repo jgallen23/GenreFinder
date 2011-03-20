@@ -4,11 +4,10 @@ lastfm = require "./lib/lastfm"
 ejs = require "ejs"
 app = express.createServer()
 
-artists = []
-
 ejs.open = '{{'
 ejs.close = '}}'
 
+lastFMAPIKey = "b65df1403e2b6b46ff46fb1c5cb5f578"
 app.configure () ->
 	app.use express.methodOverride()
 	app.use express.bodyParser()
@@ -31,20 +30,30 @@ app.get "/", (req, res) ->
 
 app.get "/artists", (req, res) ->
 	a = music.getArtistsAndGenres (artists) ->
-		console.log artists
+		res.contentType 'application/json'
 		res.send JSON.stringify artists
 
 app.post "/artists", (req, res) ->
 	data = req.body
 	console.log data
-	artists.push data
+	artist = data.name
+	genre = data.genres[0]
+	music.setGenre(artist, genre)
+	res.contentType 'application/json'
 	res.send '{ "status": "ok" }'
 
 app.get "/lastfm/similar/:artist", (req, res) ->
 	artist = req.params.artist
-	l = new lastfm.LastFm "b65df1403e2b6b46ff46fb1c5cb5f578"
+	l = new lastfm.LastFm lastFMAPIKey
 	l.getSimilar artist, (similar) ->
+		res.contentType 'application/json'
 		res.send JSON.stringify(similar)
 
+app.get "/lastfm/tags/:artist", (req, res) ->
+	artist = req.params.artist
+	l = new lastfm.LastFm lastFMAPIKey
+	l.getTags artist, (tags) ->
+		res.contentType 'application/json'
+		res.send JSON.stringify(tags)
 
 app.listen 3000
