@@ -1,6 +1,7 @@
 window.GenreFinderController = Backbone.Controller.extend
   initialize: ->
     @artistsLoaded = false
+    @artistView = null
     Artists.fetch { success: =>
       @artistNames = Artists.map (item) ->
         item.get "name"
@@ -20,29 +21,17 @@ window.GenreFinderController = Backbone.Controller.extend
     @artistsLoaded = true
 
   artist: (name) ->
-    #Clear existing
-    $("#Artist [role='details'], #Artist [role='tags'], #Artist [role='similar']").html('')
 
     $("#ArtistList").hide()
     $("#Artist").show()
+
     artist = Artists.models[@artistNames.indexOf name]
     name = name.replace(/\s/g, "+")
-    new ArtistView { model: artist }
-    #Similar
-    $.getJSON "/lastfm/similar/#{ name }", (data) ->
-      lastFMSimilar = data.map (item) ->
-        return item.name
-      similar = Artists.filter (item) ->
-        lastFMSimilar.indexOf(item.get("name")) != -1
 
-      new SimilarArtistView { collection: similar }
-    #Tags
-    $.getJSON "/lastfm/tags/#{ name }", (tags) ->
-      tv = new TagsView { collection: tags }
-      tv.bind "tagSet", (tag) ->
-        artist.set { genres: [tag] }
-        artist.save()
-
+    if @artistView
+      @artistView.setModel artist
+    else
+      @artistView = new ArtistView model: artist, el: $("#Artist")
   
   next: (name) ->
     index = @artistNames.indexOf name

@@ -4,14 +4,7 @@
 	</head>
 	<body>
 		<div id="ArtistList"></div>
-		<div id="Artist">
-			<a href="#">back</a>
-			<div role="details"></div>
-			<h2>Similar</h2>
-			<div role="similar"></div>
-			<h2>Tags</h2>
-			<div role="tags"></div>
-		</div>
+		<div id="Artist"> </div>
 
 		<script type="text/template" id="ArtistListTemplate">
 			<ul>
@@ -22,10 +15,17 @@
 		</script>
 
 		<script type="text/template" id="ArtistTemplate">
-			<a href="#artist/<%= artist.get('name') %>/prev">prev</a>
-			<a href="#artist/<%= artist.get('name') %>/next">next</a>
-			<h1><%= artist.get('name') %></h1>
-			<div><%= artist.get('genres').join(',') %></div>
+			<a href="#">back</a>
+            <div role="details">
+                <a href="#artist/<%= artist.get('name') %>/prev">prev</a>
+                <a href="#artist/<%= artist.get('name') %>/next">next</a>
+                <h1><%= artist.get('name') %></h1>
+                <div><%= artist.get('genres').join(',') %></div>
+            </div>
+			<h2>Similar</h2>
+			<div role="similar"></div>
+			<h2>Tags</h2>
+			<div role="tags"></div>
 		</script>
 
 		<script type="text/template" id="SimilarAritstTemplate">

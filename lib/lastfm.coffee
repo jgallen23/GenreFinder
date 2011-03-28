@@ -38,7 +38,7 @@ class LastFm
   getTags: (artist, cb) ->
     url = "?method=artist.gettoptags&artist=#{ artist }"
     @makeRequest url, (data) ->
-      cb data.toptags.tag
+      cb data.toptags.tag[0...10]
 
 exports.LastFm = LastFm
 

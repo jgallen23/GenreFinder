@@ -30,30 +30,28 @@ app.get "/", (req, res) ->
 
 app.get "/artists", (req, res) ->
   a = music.getArtistsAndGenres (artists) ->
-    res.contentType 'application/json'
-    res.send JSON.stringify artists
+    res.send JSON.stringify artists, "Content-Type": "application/json"
+
 
 app.post "/artists", (req, res) ->
   data = req.body
   console.log data
   artist = data.name
   genre = data.genres[0]
-  music.setGenre(artist, genre)
-  res.contentType 'application/json'
-  res.send '{ "status": "ok" }'
+  music.setGenre artist, genre
+  res.send '{ "status": "ok" }', "Content-Type": "application/json"
 
 app.get "/lastfm/similar/:artist", (req, res) ->
   artist = req.params.artist
   l = new lastfm.LastFm lastFMAPIKey
   l.getSimilar artist, (similar) ->
-    res.contentType 'application/json'
-    res.send JSON.stringify(similar)
+    res.send JSON.stringify(similar), "Content-Type": 'application/json'
 
 app.get "/lastfm/tags/:artist", (req, res) ->
   artist = req.params.artist
   l = new lastfm.LastFm lastFMAPIKey
   l.getTags artist, (tags) ->
-    res.contentType 'application/json'
-    res.send JSON.stringify(tags)
+    res.send JSON.stringify(tags), "Content-Type": 'application/json'
+
 
 app.listen 3000, "0.0.0.0"
