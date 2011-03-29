@@ -1,6 +1,7 @@
 express = require "express"
 music = require "./lib/music"
 lastfm = require "./lib/lastfm"
+io = require "socket.io"
 ejs = require "ejs"
 app = express.createServer()
 
@@ -28,30 +29,44 @@ app.configure () ->
 app.get "/", (req, res) ->
   res.render "index.html"
 
-app.get "/artists", (req, res) ->
-  a = music.getArtistsAndGenres (artists) ->
-    res.send JSON.stringify artists, "Content-Type": "application/json"
+socket = io.listen(app)
 
+socket.on "connection", (client) ->
+  console.log "connect"
 
-app.post "/artists", (req, res) ->
-  data = req.body
-  console.log data
-  artist = data.name
-  genre = data.genres[0]
-  music.setGenre artist, genre
-  res.send '{ "status": "ok" }', "Content-Type": "application/json"
+  client.on "message", (data) ->
+    console.log data
+    res =
+      action: data.action
 
-app.get "/lastfm/similar/:artist", (req, res) ->
-  artist = req.params.artist
-  l = new lastfm.LastFm lastFMAPIKey
-  l.getSimilar artist, (similar) ->
-    res.send JSON.stringify(similar), "Content-Type": 'application/json'
+    switch data.action
+      when "get.artists" then do ->
+        a = music.getArtistsAndGenres (artists) ->
+          res.artists = artists
+          client.send res
 
-app.get "/lastfm/tags/:artist", (req, res) ->
-  artist = req.params.artist
-  l = new lastfm.LastFm lastFMAPIKey
-  l.getTags artist, (tags) ->
-    res.send JSON.stringify(tags), "Content-Type": 'application/json'
+      when "get.lastfm.tags" then do ->
+        artist = data.artist
+        l = new lastfm.LastFm lastFMAPIKey
+        l.getTags artist, (tags) ->
+          res.tags = tags
+          client.send res
+
+      when "get.lastfm.similar" then do ->
+        artist = data.artist
+        l = new lastfm.LastFm lastFMAPIKey
+        l.getSimilar artist, (similar) ->
+          res.similar = similar
+          client.send res
+
+      when "set.genre" then do ->
+        artist = data.artist
+        genre = data.genre
+        music.setGenre artist, genre
+
+  client.on "disconnect", (data) ->
+    console.log "disconnect"
+
 
 
 app.listen 3000, "0.0.0.0"

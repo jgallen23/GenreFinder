@@ -49,4 +49,6 @@ exports.setGenre = (artist, genre) ->
   end tell
   """
   applescript.execString script, (err, rtn) ->
+    console.log err
+    console.log rtn
 
